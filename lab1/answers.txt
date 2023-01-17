@@ -1,0 +1,141 @@
+/******************************************************************************
+** DIT181 Datastrukturer och algoritmer, LP3 2021
+** Lab 1: Sorting, Complexity
+*******************************************************************************/
+
+Group members:
+- [Lina Boman]
+- [Navya Pulikandla]
+- [Maheli Silva]
+
+/******************************************************************************
+** Task: Figuring out the complexity
+**
+** 1. What is the complexity of running each of the following algorithms
+**    on each of the following kinds of inputs?
+**    You only have to decide between quadratic or faster than quadratic.
+******************************************************************************/
+
+Insertion.java on:
+
+- random inputs:      [Quadratic] []
+- 95% sorted inputs:  [Quadratic] []
+- sorted inputs:      [] [Faster than quadratic]
+
+Quick.java on:
+
+- random inputs:      [] [Faster than quadratic]
+- 95% sorted inputs:  [] [Faster than quadratic]
+- sorted inputs:      [Quadratic] []
+
+Merge.java on:
+
+- random inputs:      [] [Faster than quadratic]
+- 95% sorted inputs:  [] [Faster than quadratic]
+- sorted inputs:      Faster than quadratic
+
+/******************************************************************************
+** 2. How did you check if an algorithm had quadratic complexity or not?
+******************************************************************************/
+
+Rate of growth(time) = (rate of growth(size))^2    ==> quadratic
+Rate of growth(time) < (rate of growth(size))^2    ==> faster than quadratic
+
+[Compare complexity of one array size (for example 10000) with complexity of another array size (for example 30000) and see if
+if the rate of growth in time is equal to (rate of growth in size)^2. If roughly that, then quadratic, if less then it is faster
+than quadratic. ]
+
+/******************************************************************************
+** Task: Improving quicksort
+**
+** 3. Do the following changes affect the complexity of quicksort
+**    on any kind of input data? If so, what is it that changes?
+******************************************************************************/
+
+Shuffling the array first:
+[] [yes+reason]
+Random: If the array is already random, shuffling won't make much of a difference. Still faster than quadratic.
+
+95% sorted: Yes, for the same reason as above. Still faster than quadratic, but still an improvement.
+
+Sorted: When shuffling the array a random element becomes the first element, which is more likely to be closer to the
+a median value, which in turn is the ideal pivot for quicksort. The complexity is then faster than quadratic.
+
+Median-of-three pivot selection:
+[] [yes+reason]
+Random: No, Since array is shuffled already, first element of the array, which is the pivot in the default case, is
+already a close to median pivot.
+
+95% sorted: Yes, Since it's 95% sorted the pivot Median- of- three pivot
+selection helps us find a good pivot. Median of three is closer to the ideal pivot than picking the first element as
+the pivot, as it was in the default setting. Still faster than quadratic complexity wise, but still an improvement.
+
+Sorted: Yes, what makes the sorted array at default settings so slow is the low element pivot, but when using the median of
+three implementation, the pivot becomes the most ideal pivot: the middle element. The complecity that was quadratic, now
+becomes faster.
+
+Insertion sort for small arrays:
+[] [yes+reason]
+Arrays of smaller sizes are sorted faster with insertion sort.
+
+Random: The random array does improve with the insertion cutoff implementation, but still faster than quadratic.
+
+95%: Also improves, still faster than quadratic.
+
+Sorted: No difference.
+
+/******************************************************************************
+** 4. What is a good cutoff to use for insertion sort?
+**    Explain briefly how you came to this answer.
+**    Remember that you should try to find the answer in a systematic way.
+******************************************************************************/
+
+[We ran multiple quicksorts with cutoffs from 10-500 (every 10th from 10 to 200 and then 300, 400 and 500) 13 times.
+Quickest cutoff could be anything from 40 to 150. Also looking at the time table, those numbers make sense since insertion
+sort shows to be more effective at array sizes up to 300. ]
+
+/******************************************************************************
+** 5. Which combination of improvements gives the best performance?
+******************************************************************************/
+
+[We found that median of three and cutoff at 40-60 gave the best performances.]
+
+/******************************************************************************
+** Appendix: General information
+**
+** A. Approximately how many hours did you spend on the assignment?
+******************************************************************************/
+
+[Lina]:  [12]
+[Navya]:  [12]
+[Maheli]:  [12]
+
+
+/******************************************************************************
+** B. Are there any known bugs / limitations?
+******************************************************************************/
+
+[no?]
+
+/******************************************************************************
+** C. Did you collaborate with any other students on this lab?
+**    If so, please write in what way you collaborated and with whom.
+**    Also include any resources (including the web) that you may
+**    may have used in creating your design.
+******************************************************************************/
+
+[Discussed the relation between the growth of input and growth of time with Karl Stahre.]
+
+/******************************************************************************
+** D. Describe any serious problems you encountered.                    
+******************************************************************************/
+
+[]
+
+/******************************************************************************
+** E. List any other comments here.
+**    Feel free to provide any feedback on how much you learned 
+**    from doing the assignment, and whether you enjoyed it.                                             
+******************************************************************************/
+
+[Gained better understanding on how the sorting algorithms work and how they change with the growth of input size.]

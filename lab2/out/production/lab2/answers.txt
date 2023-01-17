@@ -1,0 +1,104 @@
+
+/******************************************************************************
+** DIT181  Datastrukturer och algoritmer, LP3 2021
+** Lab 2: Autocomplete
+*******************************************************************************/
+
+Group members:
+- [Lina Boman]
+- [Navya Pulikandla]
+- [Maheli Silva]
+
+/******************************************************************************
+** 1. Describe how your firstIndexOf() method in RangeBinarySearch.java
+**    finds the first index of a key that equals the search key.
+******************************************************************************/
+
+[The searching method is for the most part a loop that repeats itself. At first
+we assign index 0 to a left pointer, and then the other end of the array, index
+(array.length-1),  to a right pointer. Then, the key (prefix) will be compared
+to the element right in the middle of the two pointers. If the key is found to
+be on the left side of the middle index, that means we know we should look at
+the left half of the array, so we  assign the middle index -1 to  the right
+pointer. To the contrary, if the key is found to be on the right half of the
+array, we reassign left pointer to be middle + 1, and exclude/discard the left
+half of the array when we reenter the loop. However, if middle index has an element
+with a word that has a prefix that matches the key, we now have an index that might
+be the firstIndexOf ( its like a qualifying candidate), so we assign the index to
+"result" in the meantime (as long as we don't find anymore matches on the left side
+of this match) and assign right pointer the index middle(-1). We won't know for sure
+that this is the first index with a match in the array until we have exhausted the
+entire array (until the left pointer surpasses the right pointer). So in conclusion,
+this loop repeats itself until the right pointer is pointing at an index that is smaller
+than the index that the left pointer is pointing at (then we know we have exhausted the
+entire array). If there was a match, the method will return the last (or only) index the
+method found a matching element at.]
+
+/******************************************************************************
+** 2. State and justify the asymptotic complexity of the operations
+**    in the Autocomplete class in the dictionary size n.
+**    For all Matches and numberOfMatches, the asymptotic complexity
+**    should also depend on the matching terms m.
+**
+**    You may take the number of comparisons as a proxy for the runtime.
+******************************************************************************/
+
+sortDictionary: O(...)
+
+[Arrays.sort uses mergesort and has complexity O(n logn)]
+
+allMatches: O(...)
+
+[log N for the first and last index methods because they are binary search methods
+and there are M terms to copy to the new array, and that new array is sorted with binary search
+which has complexity log M. For the matching terms the complexity becomes M + M log M, and therefore
+its asymptotic complexity becomes M log M since M log M > M.
+And that adds up to log N + M log M]
+
+numberOfMatches: O(...)
+
+[Using firstIndexOf and lastIndexOf (compare to get amount of matches) which each has complexity
+log N, the complexity of the method is then log N.]
+
+/******************************************************************************
+** Appendix: General information
+**
+** A. Approximately how many hours did you spend on the assignment?
+******************************************************************************/
+
+[Lina]:  [14 hrs]
+[Navya]:  [14 hrs]
+[Maheli]:  [14 hrs]
+
+/******************************************************************************
+** B. Are there any known bugs / limitations?
+******************************************************************************/
+
+[...]
+
+/******************************************************************************
+** C. Did you collaborate with any other students on this lab?
+**    If so, please write in what way you collaborated and with whom.
+**    Also include any resources (including the web) that you may
+**    may have used in creating your design.
+******************************************************************************/
+
+[
+https://www.youtube.com/watch?v=6ysjqCUv3K4&t=725s&ab_channel=CSDojo
+https://www.techiedelight.com/find-first-or-last-occurrence-of-a-given-number-sorted-array/
+...]
+
+/******************************************************************************
+** D. Describe any serious problems you encountered.                    
+******************************************************************************/
+
+[...]
+
+/******************************************************************************
+** E. List any other comments here.
+**    Feel free to provide any feedback on how much you learned 
+**    from doing the assignment, and whether you enjoyed it.                                             
+******************************************************************************/
+
+[...]
+
