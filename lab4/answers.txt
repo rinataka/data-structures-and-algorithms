@@ -1,0 +1,222 @@
+/******************************************************************************
+** DIT181  Datastrukturer och algoritmer, LP3 2021
+** Lab 4: Path finder
+*******************************************************************************/
+
+Group members:
+- [Lina Boman]
+- [Navya Pulikandla]
+- [Maheli Silva]
+
+/******************************************************************************
+** 1. List the minimal cost, shortest path, and number of loop iterations
+**    for each of the following invocations.
+******************************************************************************/
+
+> java RunPathFinder ucs AdjacencyGraph graphs/AdjacencyGraph/citygraph-SE.txt Lund Kiruna
+
+loop iterations: [5427]
+minimal cost:    [1826.0]
+shortest path:   [31]
+
+> java RunPathFinder ucs NPuzzle 3 "/HFG/BED/C_A/" "/ABC/DEF/GH_/"
+
+loop iterations: [483573]
+minimal cost:    [31.0]
+shortest path:   [31]
+
+> java RunPathFinder astar NPuzzle 3 "/HFG/BED/C_A/" "/ABC/DEF/GH_/"
+
+loop iterations: [32375]
+minimal cost:    [31.0]
+
+> java RunPathFinder ucs NPuzzle 3 "/HGF/BED/C_A/" "/ABC/DEF/GH_/"
+
+loop iterations: [483841]
+minimal cost:    [no path found]
+shortest path:   [no path found]
+
+> java RunPathFinder ucs GridGraph graphs/GridGraph/AR0011SR.map "23:161" "130:211"
+
+loop iterations: [159327]
+minimal cost:    [366.40411229460744]
+shortest path:   [308]
+
+> java RunPathFinder astar GridGraph graphs/GridGraph/AR0011SR.map "23:161" "130:211"
+
+loop iterations: [95160]
+minimal cost:    [366.4041122946075]
+
+> java RunPathFinder ucs WordLadder graphs/WordLadder/words-saldo.txt syster broder
+
+loop iterations: [71182]
+minimal cost:    [11.0]
+shortest path:   [11]
+
+> java RunPathFinder astar WordLadder graphs/WordLadder/words-saldo.txt syster broder
+
+loop iterations: [7055]
+minimal cost:    [11.0]
+
+/******************************************************************************
+** 2. For each of the three classes GridGraph, WordLadder, and NPuzzle,
+**    what is the approximate improvement in the number of loop iterations
+**    by running A* instead of UCS?
+**    Try a number of different examples per class.
+******************************************************************************/
+
+GridGraph:  [5.53 times less loops on average]
+
+WordLadder: [8 different runs showed 226 times less loops on average]
+
+NPuzzle:    [5 different runs showed 47.44 times less loops on average]
+
+/******************************************************************************
+** 3. For which of the three classes GridGraph, WordLadder, and NPuzzle,
+**    did the heuristics .guessCost() have the most impact?
+**    Why do you think this is the case?
+******************************************************************************/
+
+[From our test runs WordLadder clearly benefited the most from the guessCost, but NPuzzle also had
+improved significantly. To find the difference between the two, we modified outgoingEdges() in WordLadder
+and NPuzzle, so that it would print the size of the list of outgoing edges before returning the list.
+For each iteration, NPuzzle returned lists with the size of 2-4, but with WordLadder we would see lists
+with the size of anything from 2 to almost 30. Therefore we feel that that makes the results make sense,
+since prioritising in longer lists means that there are many outgoing nodes that are never explored because
+they are estimated to be more expensive.
+
+When it comes to gridgraph that had less improvement with guessCost it is probably because a
+straight diagonal line to the goal is not as relevant since the nature of mazes usually is that
+the path is anything but a straight diagonal line.
+]
+
+/******************************************************************************
+** 4. Give pseudo-code of the following methods that you implemented.
+**    Try to abstract over details which are relevant only for Java.
+**    Make it easy to follow for a human.
+******************************************************************************/
+
+WordLadder.outgoingEdges(String w):
+    [
+    LinkedList outgoingEdges(String w):
+    List<DirectedEdge<String>> words = new LinkedList()
+
+    put letters of w into chars[]
+     for i = 0 to chars.length-1
+        for each letter in alphabet
+            clone chars[] into newWord[]
+            newWord[i] = letter
+            currentWord = new String of newWord[]
+            if dictionary contains currentWord and currentWord does not equal w
+                DirectedEdge<String> edge = new DirectedEdge(w, currentWord)
+                words.add(edge)
+     return words
+     ]
+
+WordLadder.guessCost(String w, String u):
+    [
+    double guessCost(String w, String u):
+     if w.length != u.length
+       return 0
+
+     add letters of w to arrW[]
+     add letters of u to arrU[]
+
+     initialise difference counter
+
+     for i=0 to arrW.length-1
+        if arrW[i] != arrU[i]
+            difference=difference+1
+     return difference
+     ]
+
+
+GridGraph.guessCost(Coord p, Coord q):
+    [
+        guessCost(Coord p, Coord q)
+        sideA = calculate difference between coordinate x of p and q
+        sideB = calculate difference between coordinate y of p and q
+
+        return sqrt of (sideA squared + sideB squared)
+        ]
+
+/******************************************************************************
+** 5. Give pseudo-code of the method .searchAstar() in PathFinder.
+******************************************************************************/
+
+PathFinder.searchAstar(Node start, Node goal):
+    [Result searchAstar(Node start, Node goal)
+     initialise iterations counter
+
+     create new instance of priority queue with a comparator(entry -> entry.costEstimate)
+
+     add start node to pqueue with guess of cost to goal
+
+     List<Node> visitedNodes = new LinkedList()
+
+     while pqueue is not empty
+        iterations = iterations+1
+
+        Remove node from pqueue
+        if visitedNodes does not contain this node
+
+            visitedNodes.add(node)
+            if node = goal
+                return result with path information including amount of iterations, the path and cost of path
+
+            for each outgoing edge in graph
+            costToNext = cost of path to current node + weight of outgoing edge
+            estimate = costToNext + guess of cost to goal from node at the end of outgoing edge
+
+            pqueue.add(node at the end of outgoing edge with estimate)
+     return result with unsuccessful path find
+
+     ]
+
+/******************************************************************************
+** 6. What are the main differences between your implementations 
+**    of .searchAstar() and .searchUCS()?
+******************************************************************************/
+
+[For Astar the changes are the way the entries in the queue are prioritised. In Astar we are adding an estimate
+of the cost from the next node to the goal (a heuristic). The queue is prioritised by an estimate of what
+the path from the start to the goal through this node is going to cost.]
+
+/******************************************************************************
+** Appendix: General information
+**
+** A. Approximately how many hours did you spend on the assignment?
+******************************************************************************/
+
+[Lina Boman]:  [13]
+[Navya Pulikandla]:  [13]
+[Maheli Silva]:  [13]
+
+/******************************************************************************
+** B. Are there any known bugs / limitations?
+******************************************************************************/
+
+[...]
+
+/******************************************************************************
+** C. Did you collaborate with any other students on this lab?
+**    If so, please write in what way you collaborated and with whom.
+**    Also include any resources (including the web) that you may
+**    may have used in creating your design.
+******************************************************************************/
+
+[...]
+
+/******************************************************************************
+** D. Describe any serious problems you encountered.                    
+******************************************************************************/
+
+[...]
+
+/******************************************************************************
+** E. List any other comments here.
+**    Feel free to provide any feedback on how much you learned 
+**    from doing the assignment, and whether you enjoyed it.                                             
+******************************************************************************/
+
+[...]
